@@ -1,0 +1,7 @@
+certifi==2024.12.14
+openai==1.59.7
+protobuf==5.29.3
+python-dotenv==1.0.1
+Requests==2.32.3
+urllib3==2.3.0
+zstandard==0.23.0

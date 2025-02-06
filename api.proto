@@ -1,0 +1,341 @@
+syntax = "proto3";
+
+package tinder.services.authgateway;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+// Request message for authentication gateway
+message AuthGatewayRequest {
+  oneof factor {
+    Phone phone = 1;
+    PhoneOtp phone_otp = 2;
+    Email email = 3;
+    GoogleToken google_token = 4;
+    EmailOtp email_otp = 5;
+    FacebookToken facebook_token = 6;
+    PhoneOtpResend phone_otp_resend = 7;
+    EmailOtpResend email_otp_resend = 8;
+    GetInitialState get_initial_state = 9;
+    RefreshAuth refresh_auth = 10;
+    AppleToken apple_token = 11;
+    DismissSocialConnectionList dismiss_social_connection_list = 12;
+    EmailMagicLink email_magic_link = 13;
+    EmailMagicLinkOtp email_magic_link_otp = 14;
+    CreateNewAccount create_new_account = 15;
+    ExternalAuthCode external_auth_code = 16;
+    ExternalAccessToken external_access_token = 17;
+    Captcha captcha = 18;
+    ExistingPhoneOTP existing_phone_otp = 19;
+    ExistingPhoneOTPResend existing_phone_otp_resend = 20;
+  }
+}
+
+// Response message from authentication gateway
+message AuthGatewayResponse {
+  MetaProto meta = 1;
+  ErrorProto error = 2;
+  
+  oneof data {
+    GetPhoneState get_phone_state = 3;
+    ValidatePhoneOtpState validate_phone_otp_state = 4;
+    GetEmailState get_email_state = 5;
+    ValidateEmailOtpState validate_email_otp_state = 6;
+    OnboardingState onboarding_state = 7;
+    LoginResult login_result = 8;
+    SocialConnectionList social_connection_list = 9;
+    AppleAccountNotFound apple_account_not_found = 10;
+    ValidateEmailMagicLinkOtpState validate_email_magic_link_otp_state = 11;
+    ValidateFacebookState validate_facebook_state = 12;
+    ValidateGoogleState validate_google_state = 13;
+    FacebookAccountNotFound facebook_account_not_found = 14;
+    GoogleAccountNotFound google_account_not_found = 15;
+    CaptchaState captcha_state = 16;
+    LineAccountNotFound line_account_not_found = 17;
+    ValidateExistingPhoneState validate_existing_phone_state = 18;
+    TemporaryLoginResult temporary_login_result = 19;
+  }
+}
+
+message FacebookToken {
+  string external_token = 1;
+  google.protobuf.StringValue refresh_token = 2;
+}
+
+message Phone {
+  string phone = 1;
+  google.protobuf.StringValue refresh_token = 2;
+  oneof check {
+    google.protobuf.StringValue captcha_token = 3;
+    google.protobuf.StringValue ios_device_token = 4;
+    google.protobuf.StringValue android_jws = 5;
+  }
+  google.protobuf.Int32Value android_jws_version = 6;
+}
+
+message PhoneOtpResend {
+  google.protobuf.StringValue phone = 1;
+  google.protobuf.StringValue refresh_token = 2;
+  oneof check {
+    google.protobuf.StringValue ios_device_token = 3;
+    google.protobuf.StringValue android_jws = 4;
+  }
+  google.protobuf.Int32Value android_jws_version = 5;
+}
+
+message PhoneOtp {
+  google.protobuf.StringValue phone = 1;
+  string otp = 2;
+  google.protobuf.StringValue refresh_token = 3;
+}
+
+message Email {
+  string email = 1;
+  google.protobuf.StringValue refresh_token = 2;
+  google.protobuf.BoolValue marketing_opt_in = 3;
+}
+
+message EmailOtpResend {
+  google.protobuf.StringValue email = 1;
+  google.protobuf.StringValue refresh_token = 2;
+}
+
+message GoogleToken {
+  string external_token = 1;
+  google.protobuf.StringValue refresh_token = 2;
+  google.protobuf.BoolValue marketing_opt_in = 3;
+  google.protobuf.BoolValue user_behavior = 4;
+}
+
+message EmailOtp {
+  google.protobuf.StringValue email = 1;
+  string otp = 2;
+  google.protobuf.StringValue refresh_token = 3;
+}
+
+message AppleToken {
+  string external_token = 1;
+  google.protobuf.StringValue refresh_token = 2;
+  google.protobuf.StringValue raw_nonce = 3;
+}
+
+message GetInitialState {
+  google.protobuf.StringValue refresh_token = 1;
+}
+
+message RefreshAuth {
+  string refresh_token = 1;
+}
+
+message DismissSocialConnectionList {
+  string refresh_token = 1;
+}
+
+message EmailMagicLink {
+  string email = 1;
+}
+
+message EmailMagicLinkOtp {
+  string otp_token = 1;
+  google.protobuf.StringValue type = 2;
+}
+
+message CreateNewAccount {
+  string refresh_token = 1;
+}
+
+message ExternalAuthCode {
+  string auth_code = 1;
+  string client_id = 2;
+  google.protobuf.StringValue redirect_uri = 3;
+}
+
+message ExternalIdToken {
+  string id_token = 1;
+  google.protobuf.StringValue nonce_id = 2;
+}
+
+message ExternalAccessToken {
+  string access_token = 1;
+  string client_id = 2;
+  ExternalIdToken id_token = 3;
+  google.protobuf.StringValue refresh_token = 4;
+}
+
+message Captcha {
+  string reference_token = 1;
+  string captcha_token = 2;
+}
+
+message ExistingPhoneOTP {
+  string otp = 1;
+  google.protobuf.StringValue refresh_token = 2;
+}
+
+message ExistingPhoneOTPResend {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue type = 2;
+}
+
+message GetPhoneState {
+  google.protobuf.StringValue refresh_token = 1;
+}
+
+message ValidatePhoneOtpState {
+  google.protobuf.StringValue refresh_token = 1;
+  string phone = 2;
+  google.protobuf.Int32Value otp_length = 3;
+  google.protobuf.BoolValue sms_sent = 4;
+}
+
+message EmailMarketing {
+  google.protobuf.BoolValue show_marketing_opt_in = 2;
+  google.protobuf.BoolValue show_strict_opt_in = 3;
+  google.protobuf.BoolValue checked_by_default = 4;
+}
+
+message GetEmailState {
+  google.protobuf.StringValue refresh_token = 1;
+  EmailMarketing email_marketing = 2;
+}
+
+message ValidateEmailOtpState {
+  google.protobuf.StringValue refresh_token = 1;
+  oneof email {
+    string unmasked_email = 2;
+    string masked_email = 3;
+  }
+  google.protobuf.Int32Value otp_length = 4;
+  google.protobuf.BoolValue email_sent = 5;
+  EmailMarketing email_marketing = 6;
+}
+
+message OnboardingState {
+  string refresh_token = 1;
+  string onboarding_token = 2;
+  google.protobuf.StringValue user_id = 3;
+}
+
+message LoginResult {
+  enum Captcha {
+    CAPTCHA_INVALID = 0;
+    CAPTCHA_V1 = 1;
+    CAPTCHA_V2 = 2;
+  }
+
+  string refresh_token = 1;
+  string auth_token = 2;
+  Captcha captcha = 3;
+  string user_id = 4;
+  google.protobuf.Int64Value auth_token_ttl = 5;
+}
+
+message SocialConnection {
+  enum Service {
+    SERVICE_INVALID = 0;
+    SERVICE_FACEBOOK = 1;
+    SERVICE_GOOGLE = 2;
+    SERVICE_APPLE = 3;
+    SERVICE_LINE = 4;
+  }
+
+  Service service = 1;
+}
+
+message SocialConnectionList {
+  google.protobuf.StringValue refresh_token = 1;
+  repeated SocialConnection connections = 2;
+}
+
+message AppleAccountNotFound {
+  bool will_link = 1;
+  google.protobuf.StringValue refresh_token = 2;
+}
+
+message ValidateEmailMagicLinkOtpState {}
+
+message ValidateFacebookState {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue masked_email = 2;
+}
+
+message ValidateGoogleState {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue masked_email = 2;
+}
+
+message FacebookAccountNotFound {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue masked_email = 2;
+}
+
+message GoogleAccountNotFound {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue masked_email = 2;
+}
+
+message CaptchaState {
+  string reference_token = 1;
+  string captcha_public_key = 2;
+  string data_blob = 3;
+}
+
+message LineAccountNotFound {
+  google.protobuf.StringValue refresh_token = 1;
+}
+
+message ValidateExistingPhoneState {
+  google.protobuf.StringValue refresh_token = 1;
+  google.protobuf.StringValue masked_phone_number = 2;
+  google.protobuf.Int32Value otp_length = 3;
+  google.protobuf.BoolValue sms_sent = 4;
+}
+
+message TemporaryLoginResult {
+  google.protobuf.StringValue auth_token = 1;
+  google.protobuf.Int64Value auth_token_ttl = 2;
+}
+
+message Verification {
+  string type = 1;
+  string state = 2;
+}
+
+message UnderageBan {
+  google.protobuf.Int64Value underage_ttl_duration_ms = 1;
+  google.protobuf.StringValue underage_token = 2;
+  Verification verification = 3;
+  google.protobuf.BoolValue is_onboarding = 4;
+}
+
+message BanAppeal {
+  string challenge_type = 1;
+  string challenge_token = 2;
+  string refresh_token = 3;
+  string policy = 4;
+  string arkose_data_blob = 5;
+}
+
+message SelfieChallengeBan {
+  string selfie_challenge_token = 1;
+  string selfie_status = 2;
+}
+
+message BanReason {
+  oneof reason {
+    UnderageBan underage_ban = 1;
+    BanAppeal ban_appeal = 2;
+    SelfieChallengeBan selfie_challenge_ban = 3;
+  }
+}
+
+message ErrorProto {
+  int32 code = 1;
+  string message = 2;
+  BanReason ban_reason = 3;
+}
+
+message MetaProto {
+  google.protobuf.Timestamp upstream_time = 1;
+  google.protobuf.Timestamp start_time = 2;
+}
