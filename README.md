@@ -5,25 +5,25 @@ Additionally provides a tool to update the X-Auth-Token for the accounts that al
 
 ## Setup
 Install dependenices
-`pip install -r requirements.txt`
+```pip install -r requirements.txt```
 
 Create inputs.csv file with the following columns on top row:
-`X-Auth-Token,refresh-token,persistent-device-id,proxy`
+```X-Auth-Token,refresh-token,persistent-device-id,proxy```
 populate with accounts according to description.
 
-Run `python scraper.py` once to generate a .env file and fill with your OpenAI key (must have gpt-4o-mini access) and optionally ImageTyperz key if you intend to use the auth token refresher.
+Run ```python scraper.py``` once to generate a .env file and fill with your OpenAI key (must have gpt-4o-mini access) and optionally ImageTyperz key if you intend to use the auth token refresher.
 
 ## Use
 
 ### Scraper
 To run the scraper use 
-`python scraper.py`
+```python scraper.py```
 this uses multithreading pools so the more threads your CPU has the faster it will run.
 
 This will create a `bios` folder which contains scraped bio's from accounts it encounters.
 
 After exhausting the daily limit (around 800-1000 people) you can run
-`python filter.py`
+```python filter.py```
 which will display a list of the Snapchat usernames found. Optionally you can redirect to file with `>`.
 
 #### Note 1: Some accounts proxies may be bad, the app will notify you about them, change their proxy if you want to use them!
@@ -31,7 +31,7 @@ which will display a list of the Snapchat usernames found. Optionally you can re
 
 ### Refresher
 To run the refresher use:
-`python refresh_token.py`
+```python refresh_token.py```
 This will refresh input.csv with new X-Auth-Token values.
 
 Accounts that get a SELFIE_CHALLENGE or that can't solve their captcha in one try get eliminated from the list. Additionally, accounts with bad proxies will get put into a separate .csv file to check.
